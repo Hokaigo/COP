@@ -1,0 +1,105 @@
+:root {
+  --bg: #242424;
+  --text: rgba(255,255,255,0.87);
+  --muted: #9aa0a6;
+  --accent: #646cff;
+  --card-bg: #1b1b1f;
+  --container-max: 1280px;
+  --primary: #0d6efd;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2rem;
+  line-height: 1.1;
+  margin: 0.2em 0 0.6em;
+}
+
+.app-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+header.navbar, footer {
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+.card.sudoku {
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+
+.page-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, 60px);
+  grid-template-rows: repeat(9, 60px);
+  justify-content: center;
+  align-content: center;
+  background-color: var(--card-bg);
+}
+
+.cell {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 2.5rem;
+  border: 1px solid #555;
+  box-sizing: border-box;
+}
+
+.cell-input {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+}
+
+.top-border {
+  border-top: 3px solid white;
+}
+.left-border {
+  border-left: 3px solid white;
+}
+.bottom-border {
+  border-bottom: 3px solid white;
+}
+.right-border {
+  border-right: 3px solid white;
+}
