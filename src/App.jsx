@@ -1,5 +1,5 @@
-import Header from "./components/Header.jsx";
-import Footer from "./components/Footer.jsx"
+import Header from "./components/common/Header.jsx";
+import Footer from "./components/common/Footer.jsx"
 import StartPage from "./pages/StartPage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import ResultPage from './pages/ResultPage.jsx';
