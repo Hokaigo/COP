@@ -27,7 +27,7 @@ export default function Cell({ row, col, value, isFixed, isSelected, isFocused, 
     const content = isFixed ? (value ?? "") : isSelected ? inputEl : (value ?? "");
 
     const extra = [isSelected ? "selected" : "", isFocused ? "cell-focus" : "", isSame ? "cell-same" : "",
-        isLineOrBlock ? "cell-lineblock" : ""].filter(Boolean).join(" ");
+        isLineOrBlock ? "cell-lineblock" : "", isFixed ? "cell-fixed" : ""].filter(Boolean).join(" ");
 
     return (
         <div data-row={row} data-col={col} role="gridcell" aria-selected={isSelected} className={`cell ${className} ${extra}`}

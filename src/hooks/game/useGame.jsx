@@ -9,9 +9,12 @@ function emptyGrid() {
 }
 
 export default function useGame(dataSeed) {
-    const initialData = useMemo(() => dataSeed, [dataSeed]);
-    const [board, setBoard] = useState(() => cloneBoard(initialData));
-    const fixed = useMemo(() => initialData.map(row => row.map(cell => cell !== null)), [initialData]);
+    const [board, setBoard] = useState(() => cloneBoard(dataSeed));
+    const fixed = useMemo(() => (dataSeed || []).map(row => row.map(cell => cell !== null)), [dataSeed]);
+
+    useEffect(() => {
+        setBoard(cloneBoard(dataSeed));
+    }, [dataSeed]);
 
     const [selected, setSelected] = useState({ row: null, col: null });
     const [selectedValue, setSelectedValue] = useState(null);
@@ -31,21 +34,21 @@ export default function useGame(dataSeed) {
         return grid;
     }
 
-    function calculateLineGrid(selected) {
-        if (selected.row === null || selected.col === null) return emptyGrid();
+    function calculateLineGrid(sel) {
+        if (sel.row === null || sel.col === null) return emptyGrid();
         const grid = emptyGrid();
         for (let i = 0; i < 9; i++) {
-            grid[selected.row][i] = true;
-            grid[i][selected.col] = true;
+            grid[sel.row][i] = true;
+            grid[i][sel.col] = true;
         }
         return grid;
     }
 
-    function calculateBlock(selected) {
-        if (selected.row === null || selected.col === null) return emptyGrid();
+    function calculateBlock(sel) {
+        if (sel.row === null || sel.col === null) return emptyGrid();
         const grid = emptyGrid();
-        const baseRow = Math.floor(selected.row / 3) * 3;
-        const baseCol = Math.floor(selected.col / 3) * 3;
+        const baseRow = Math.floor(sel.row / 3) * 3;
+        const baseCol = Math.floor(sel.col / 3) * 3;
         for (let r = baseRow; r < baseRow + 3; r++) {
             for (let c = baseCol; c < baseCol + 3; c++) {
                 grid[r][c] = true;
@@ -132,7 +135,7 @@ export default function useGame(dataSeed) {
 
 
     function reset() {
-        setBoard(cloneBoard(initialData));
+        setBoard(cloneBoard(dataSeed));
         setSelected({ row: null, col: null });
         setSelectedValue(null);
     }
