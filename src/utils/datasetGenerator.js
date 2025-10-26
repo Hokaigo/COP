@@ -1,3 +1,5 @@
+import { EMPTY_CELLS_BOUNDS, DEFAULT_EMPTY_CELLS } from "../config/gameConfig.js";
+
 function cloneBoard(b) {
     return b.map(row => row.slice());
 }
@@ -89,31 +91,31 @@ export function countSolutions(board, limit = 2) {
     return count;
 }
 
-export function generatePuzzle() {
-    const targetHoles = 46;
+export function generatePuzzle({ emptyCellsCount } = {}) {
+    const parsed = Number(emptyCellsCount);
+    const base = Number.isFinite(parsed) ? parsed : DEFAULT_EMPTY_CELLS;
+
+    const targetEmptyCells = Math.max(EMPTY_CELLS_BOUNDS.min, Math.min(EMPTY_CELLS_BOUNDS.max, Math.round(base)));
 
     const solved = generateSolvedBoard();
-
     const positions = shuffle([...Array(81).keys()]);
-
     const puzzle = cloneBoard(solved);
     let removed = 0;
 
-    for (const pos of positions) {
-        if (removed >= targetHoles) break;
-        const r = Math.floor(pos / 9);
-        const c = pos % 9;
+    for (const position of positions){
+        if(removed >= targetEmptyCells) break;
+        const r = Math.floor(position / 9);
+        const c = position % 9;
 
         const backup = puzzle[r][c];
         puzzle[r][c] = null;
 
-        const sols = countSolutions(puzzle, 2);
-        if (sols !== 1) {
+        const solutions = countSolutions(puzzle, 2);
+        if (solutions !== 1){
             puzzle[r][c] = backup;
-        } else {
+        } else{
             removed++;
         }
     }
-
     return puzzle;
 }
