@@ -1,25 +1,41 @@
-import {Link} from "react-router-dom";
-import {useAuth} from "../../contexts/AuthContext.jsx";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 
-export default function Header( {onOpenSettings} ) {
+export default function Header({ onOpenSettings }) {
     const { currentUser, logout } = useAuth();
 
     return (
-        <header className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container d-flex justify-content-between align-items-center">
-                <Link to="/" className="navbar-brand fw-bold fs-2 text-decoration-none">Sudoku game</Link>
-                <div className="d-flex gap-2">
-                    <button className="btn btn-sm btn-info" onClick={onOpenSettings}>Settings</button>
+        <header className="app-header sticky top-0 z-40">
+            <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+                <Link to="/" className="text-2xl font-extrabold transition-colors"><span className="brand">Sudoku Game</span></Link>
+
+                <div className="flex items-center gap-2">
+                    <button onClick={onOpenSettings}
+                            className="px-3 py-1.5 rounded-md bg-indigo-600/90 hover:bg-indigo-500/90 text-sm font-medium transition shadow-sm">
+                        Settings
+                    </button>
 
                     {currentUser ? (
                         <>
-                            <Link to={`/profile/${currentUser.id}`} className="btn btn-sm btn-primary">Profile</Link>
-                            <button className="btn btn-sm btn-danger" onClick={logout}>Logout</button>
+                            <Link to={`/profile/${currentUser.id}`}
+                                className="px-3 py-1.5 rounded-md bg-blue-600/90 hover:bg-blue-500/90 text-sm font-medium transition">
+                                Profile
+                            </Link>
+                            <button onClick={logout}
+                                className="px-3 py-1.5 rounded-md bg-red-600/90 hover:bg-red-500/90 text-sm font-medium transition">
+                                Logout
+                            </button>
                         </>
                     ) : (
                         <>
-                            <Link to="/login" className="btn btn-sm btn-primary">Login</Link>
-                            <Link to="/register" className="btn btn-sm btn-success">Register</Link>
+                            <Link to="/login"
+                                className="px-3 py-1.5 rounded-md bg-blue-600/90 hover:bg-blue-500/90 text-sm font-medium transition">
+                                Login
+                            </Link>
+                            <Link to="/register"
+                                className="px-3 py-1.5 rounded-md bg-emerald-600/90 hover:bg-emerald-500/90 text-sm font-medium transition">
+                                Register
+                            </Link>
                         </>
                     )}
                 </div>

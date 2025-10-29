@@ -52,6 +52,9 @@ export function useUserProfile(){
             logout();
             return;
         }
+        const confirmed = window.confirm("Are you sure you want to delete all stats info? This action cannot be undone.");
+        if (!confirmed) return;
+
         setError('');
         try {
             await deleteAllUserStats(token);
@@ -70,6 +73,8 @@ export function useUserProfile(){
             logout();
             return;
         }
+        const confirmed = window.confirm("Are you sure you want to delete this stat info? This action cannot be undone.");
+        if (!confirmed) return;
 
         setError('');
         try {
@@ -91,6 +96,9 @@ export function useUserProfile(){
         if (!token || !currentUser) {
             logout(); return;
         }
+        const confirmed = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+        if (!confirmed) return;
+
         setError('');
         try {
             await deleteUserAccount(currentUser.id, token);
