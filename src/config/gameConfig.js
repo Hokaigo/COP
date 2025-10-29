@@ -11,3 +11,5 @@ export const EMPTY_CELLS_BOUNDS = {
     min: Math.min(...presetValues),
     max: Math.max(...presetValues)
 };
+
+export const BACKEND_URL = 'http://sudoku.local';
