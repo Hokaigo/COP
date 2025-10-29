@@ -1,0 +1,17 @@
+{
+    "name": "1/backend",
+    "autoload": {
+        "psr-4": {
+            "1\\Backend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Didenko Daniil",
+            "email": "ipz235_ddo@student.ztu.edu.ua"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^6.11"
+    }
+}
