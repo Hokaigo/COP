@@ -2,12 +2,13 @@ import Board from "../components/game/Board.jsx";
 import useGameController from "../hooks/game/useGameController.jsx";
 import { useEffect, useRef } from "react";
 import { formatTime } from "../utils/time.js";
-import { useSettings } from "../contexts/SettingsContext.jsx";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import {useSettingsStore} from "../store/settingsStore.js";
 
 export default function MainPage({ onShowResult, onBackToStart, isSettingsOpen = false }) {
     const { currentUser } = useAuth();
-    const { settings } = useSettings();
+
+    const difficulty = useSettingsStore((state) => state.settings.difficulty)
 
     const { board, fixed, selected, sameGrid, lineGrid, blockGrid, selectCell, unselectCell, updateCell,
         calculateResult, resetGame, pauseTimer, startTimer, timeLeft, running, totalTime } = useGameController({ onTimeEnd: handleTimeEnd });
@@ -36,7 +37,7 @@ export default function MainPage({ onShowResult, onBackToStart, isSettingsOpen =
                         Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({
-                        difficulty: settings.difficulty,
+                        difficulty: difficulty,
                         timeSpent: Math.round(resultData.timeSpent),
                         correct: resultData.correct,
                         score: resultData.score,

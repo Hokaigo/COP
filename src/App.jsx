@@ -3,7 +3,6 @@ import Footer from "./components/common/Footer.jsx";
 import StartPage from "./pages/StartPage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import { useState } from "react";
-import { SettingsProvider } from "./contexts/SettingsContext.jsx";
 import SettingsModal from "./components/common/modal/SettingsModal.jsx";
 import GameResultsModal from "./components/common/modal/GameResultsModal.jsx";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -24,7 +23,6 @@ export default function App() {
 
     return (
         <AuthProvider>
-            <SettingsProvider>
                 <div className="flex flex-col min-h-screen bg-neutral-900 text-white">
                     <Header onOpenSettings={() => setSettingsOpen(true)} />
 
@@ -67,7 +65,6 @@ export default function App() {
                         navigate("/");
                     }}
                 />
-            </SettingsProvider>
         </AuthProvider>
     );
 }
