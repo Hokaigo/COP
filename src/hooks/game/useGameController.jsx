@@ -1,12 +1,12 @@
-import { useSettings } from "../../contexts/SettingsContext.jsx";
 import usePuzzle from "../common/usePuzzle.jsx";
 import {useCallback, useEffect} from "react";
 import useGame from "./useGame.jsx";
 import useTimer from "../common/useTimer.jsx";
+import {useSettingsStore} from "../../store/settingsStore.js";
 
 
 export default function useGameController( { autoRestartOnSettings = true, onTimeEnd } = {} ){
-    const { settings } = useSettings();
+    const settings = useSettingsStore((state) => state.settings);
 
     const  { seed, newPuzzle } = usePuzzle({ initialEmpty: settings.emptyCellsCount })
 

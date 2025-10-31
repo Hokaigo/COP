@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useSettings } from "../../../contexts/SettingsContext.jsx";
 import { PRESETS, EMPTY_CELLS_BOUNDS } from "../../../config/gameConfig.js";
+import {useSettingsStore} from "../../../store/settingsStore.js";
 
 const modalRoot = typeof document !== "undefined" ? document.getElementById("modal-root") : null;
 
@@ -19,7 +19,9 @@ const schema = yup.object({
 });
 
 export default function SettingsModal({ isOpen, onClose }) {
-    const { settings, update } = useSettings();
+    const settings = useSettingsStore((state) => state.settings);
+    const update = useSettingsStore((state) => state.update)
+
 
     const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
