@@ -14,7 +14,6 @@ const schema = yup.object({
 export default function LoginPage() {
     const { login } = useAuth();
     const [serverError, setServerError] = useState("");
-
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(schema),
     });

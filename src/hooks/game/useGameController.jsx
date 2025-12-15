@@ -2,7 +2,7 @@ import usePuzzle from "../common/usePuzzle.jsx";
 import {useCallback, useEffect} from "react";
 import useGame from "./useGame.jsx";
 import useTimer from "../common/useTimer.jsx";
-import {useSettingsStore} from "../../store/settingsStore.js";
+import {useSettingsStore} from "../../store/domain/settingsStore.js";
 
 
 export default function useGameController( { autoRestartOnSettings = true, onTimeEnd } = {} ){

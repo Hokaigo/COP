@@ -17,7 +17,6 @@ const schema = yup.object({
 export default function RegisterPage() {
     const navigate = useNavigate();
     const [serverError, setServerError] = useState("");
-
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: yupResolver(schema) });
 
     const onSubmit = async (data) => {
