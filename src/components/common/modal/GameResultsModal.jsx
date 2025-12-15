@@ -1,15 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { formatTime } from "../../../utils/time.js";
+import {useUIStore} from "../../../store/ui/uiStore.js";
+import {useResultsStore} from "../../../store/domain/resultsStore.js";
 
 const modalRoot = typeof document !== "undefined" ? document.getElementById("modal-root") : null;
 
-export default function GameResultsModal({ isOpen, result, onPlayAgain, onBackToMain }) {
+export default function GameResultsModal({ onPlayAgain, onBackToMain }) {
+    const isOpen = useUIStore((state) => state.modals.results);
+    const closeModal = useUIStore((state) => state.closeResults);
+
+    const result = useResultsStore((state) => state.result);
+
     if (!isOpen || !modalRoot) return null;
+
+    const handleBackToMain = () =>{
+        closeModal();
+        onBackToMain?.();
+    };
+
+    const handlePlayAgain = () =>{
+        closeModal();
+        onPlayAgain?.();
+    }
 
     return ReactDOM.createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onBackToMain} aria-hidden="true"/>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleBackToMain} aria-hidden="true"/>
 
             <div role="dialog" aria-modal="true" className="relative w-full max-w-md mx-4 transform transition-all"
                 onClick={(e) => e.stopPropagation()}>
@@ -31,12 +48,12 @@ export default function GameResultsModal({ isOpen, result, onPlayAgain, onBackTo
                     </div>
 
                     <footer className="flex gap-3 justify-center">
-                        <button onClick={onPlayAgain}
+                        <button onClick={handlePlayAgain}
                                 className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 font-medium transition">
                             Play again
                         </button>
 
-                        <button onClick={onBackToMain}
+                        <button onClick={handleBackToMain}
                                 className="px-4 py-2 rounded-md bg-neutral-700 hover:bg-neutral-600 font-medium transition">
                             To main page
                         </button>

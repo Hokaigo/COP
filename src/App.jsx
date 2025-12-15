@@ -15,27 +15,19 @@ import ProtectedRoute from "./components/common/routes/ProtectedRoute.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 export default function App() {
-    const [lastResult, setLastResult] = useState(null);
-    const [settingsOpen, setSettingsOpen] = useState(false);
-    const [gameResultsOpen, setGameResultsOpen] = useState(false);
     const [replayKey, setReplayKey] = useState(0);
     const navigate = useNavigate();
 
     return (
         <AuthProvider>
                 <div className="flex flex-col min-h-screen bg-neutral-900 text-white">
-                    <Header onOpenSettings={() => setSettingsOpen(true)} />
+                    <Header />
 
                     <main className="flex-grow flex flex-col justify-center container mx-auto px-4 py-6 max-w-6xl">
                         <Routes>
                             <Route path="/" element={<StartPage onStart={() => navigate("/game")} />}/>
 
-                            <Route path="/game" element={<MainPage key={replayKey} isSettingsOpen={settingsOpen}
-                                        onShowResult={(resultData) => {
-                                            setLastResult(resultData || { score: 0 });
-                                            setGameResultsOpen(true);
-                                        }} onBackToStart={() => navigate("/")}/> }
-                            />
+                            <Route path="/game" element={<MainPage key={replayKey} onBackToStart={() => navigate("/")}/> }/>
 
                             <Route element={<GuestRoute />}>
                                 <Route path="/login" element={<LoginPage />} />
@@ -53,15 +45,13 @@ export default function App() {
                     <Footer />
                 </div>
 
-                <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+                <SettingsModal />
 
-                <GameResultsModal isOpen={gameResultsOpen} result={lastResult} onPlayAgain={() => {
+                <GameResultsModal onPlayAgain={() => {
                         setReplayKey((k) => k + 1);
-                        setGameResultsOpen(false);
                         navigate("/game");
                     }}
                     onBackToMain={() => {
-                        setGameResultsOpen(false);
                         navigate("/");
                     }}
                 />

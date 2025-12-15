@@ -1,4 +1,4 @@
-import {DEFAULT_EMPTY_CELLS, PRESETS} from "../config/gameConfig.js";
+import {DEFAULT_EMPTY_CELLS, PRESETS} from "../../config/gameConfig.js";
 import { persist } from "zustand/middleware";
 import { create } from 'zustand';
 

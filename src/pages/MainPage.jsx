@@ -3,12 +3,18 @@ import useGameController from "../hooks/game/useGameController.jsx";
 import { useEffect, useRef } from "react";
 import { formatTime } from "../utils/time.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
-import {useSettingsStore} from "../store/settingsStore.js";
+import {useSettingsStore} from "../store/domain/settingsStore.js";
+import {useResultsStore} from "../store/domain/resultsStore.js";
+import {useUIStore} from "../store/ui/uiStore.js";
 
-export default function MainPage({ onShowResult, onBackToStart, isSettingsOpen = false }) {
+export default function MainPage({ onBackToStart }) {
     const { currentUser } = useAuth();
 
-    const difficulty = useSettingsStore((state) => state.settings.difficulty)
+    const difficulty = useSettingsStore((state) => state.settings.difficulty);
+    const setResult = useResultsStore((state) => state.setResult);
+
+    const openResultsModal = useUIStore((state) => state.openResults);
+    const isSettingsOpen = useUIStore((state) => state.modals.settings);
 
     const { board, fixed, selected, sameGrid, lineGrid, blockGrid, selectCell, unselectCell, updateCell,
         calculateResult, resetGame, pauseTimer, startTimer, timeLeft, running, totalTime } = useGameController({ onTimeEnd: handleTimeEnd });
@@ -25,7 +31,8 @@ export default function MainPage({ onShowResult, onBackToStart, isSettingsOpen =
     }
 
     function sendAndShowResult(resultData) {
-        onShowResult?.(resultData);
+        setResult(resultData);
+        openResultsModal();
 
         if (currentUser && resultData) {
             const token = localStorage.getItem("token");
