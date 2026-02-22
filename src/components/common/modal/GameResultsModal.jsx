@@ -6,7 +6,16 @@ import {useResultsStore} from "../../../store/domain/resultsStore.js";
 
 const modalRoot = typeof document !== "undefined" ? document.getElementById("modal-root") : null;
 
-export default function GameResultsModal({ onPlayAgain, onBackToMain }) {
+/**
+ * Відображає модальне вікно з фінальними результатами гри.
+ *
+ * @component
+ * @name GameResultsModal
+ * @param {Object} props - Властивості компонента.
+ * @param {Function} [props.onPlayAgain] - Коллбек для кнопки "Play again".
+ * @param {Function} [props.onBackToMain] - Коллбек для повернення на головну.
+ */
+export function GameResultsModal({ onPlayAgain, onBackToMain }) {
     const isOpen = useUIStore((state) => state.modals.results);
     const closeModal = useUIStore((state) => state.closeResults);
 
@@ -29,7 +38,7 @@ export default function GameResultsModal({ onPlayAgain, onBackToMain }) {
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleBackToMain} aria-hidden="true"/>
 
             <div role="dialog" aria-modal="true" className="relative w-full max-w-md mx-4 transform transition-all"
-                onClick={(e) => e.stopPropagation()}>
+                 onClick={(e) => e.stopPropagation()}>
                 <div className="bg-neutral-800 text-neutral-100 rounded-2xl shadow-2xl p-6 border border-neutral-700">
                     <header className="mb-4">
                         <h3 className="text-xl font-semibold text-center">The Game is Over</h3>
@@ -64,3 +73,4 @@ export default function GameResultsModal({ onPlayAgain, onBackToMain }) {
         modalRoot
     );
 }
+

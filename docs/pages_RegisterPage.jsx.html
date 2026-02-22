@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> pages/RegisterPage.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="App.html">App</a></li><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="Board.html">Board</a></li><li><a href="Cell.html">Cell</a></li><li><a href="CookiePopup.html">CookiePopup</a></li><li><a href="Footer.html">Footer</a></li><li><a href="GameResultsModal.html">GameResultsModal</a></li><li><a href="GuestRoute.html">GuestRoute</a></li><li><a href="Header.html">Header</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="MainPage.html">MainPage</a></li><li><a href="NotFoundPage.html">NotFoundPage</a></li><li><a href="PrivacyPage.html">PrivacyPage</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProtectedRoute.html">ProtectedRoute</a></li><li><a href="RegisterPage.html">RegisterPage</a></li><li><a href="SettingsModal.html">SettingsModal</a></li><li><a href="StartPage.html">StartPage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BACKEND_URL">BACKEND_URL</a></li><li><a href="global.html#DEFAULT_EMPTY_CELLS">DEFAULT_EMPTY_CELLS</a></li><li><a href="global.html#EMPTY_CELLS_BOUNDS">EMPTY_CELLS_BOUNDS</a></li><li><a href="global.html#PRESETS">PRESETS</a></li><li><a href="global.html#countSolutions">countSolutions</a></li><li><a href="global.html#deleteAllUserStats">deleteAllUserStats</a></li><li><a href="global.html#deleteSingleUserStat">deleteSingleUserStat</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#generatePuzzle">generatePuzzle</a></li><li><a href="global.html#generateSolvedBoard">generateSolvedBoard</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useGame">useGame</a></li><li><a href="global.html#useGameController">useGameController</a></li><li><a href="global.html#usePuzzle">usePuzzle</a></li><li><a href="global.html#useResultsStore">useResultsStore</a></li><li><a href="global.html#useSettingsStore">useSettingsStore</a></li><li><a href="global.html#useTimer">useTimer</a></li><li><a href="global.html#useUIStore">useUIStore</a></li><li><a href="global.html#useUserProfile">useUserProfile</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>pages/RegisterPage.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import * as yup from "yup";
+import {Link, useNavigate} from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object({
+    name: yup.string().trim().required("Name is required.").min(2, "Please, enter 2 or more symbols.")
+        .max(10, "Please, enter 10 or less symbols.").matches(/^\S+$/, "Name must not contain spaces."),
+    email: yup.string().trim().email("Incorrect email format.").required("Email is required.")
+        .matches(/^\S+$/, "Name must not contain spaces."),
+    password: yup.string().trim().min(6, "Please, enter 6 or more symbols.").max(30, "Please, enter 30 or less symbols.")
+        .matches(/^\S+$/, "Name must not contain spaces."),
+    confirmPassword: yup.string().oneOf([yup.ref("password")], "Passwords must match.").required("Please confirm your password."),
+    }).required();
+
+/**
+ * RegisterPage Component.
+ * Сторінка реєстрації нового користувача.
+ *
+ * @component
+ * @name RegisterPage
+ * @returns {React.ReactElement} Форма реєстрації.
+ */
+export default function RegisterPage() {
+    const navigate = useNavigate();
+    const [serverError, setServerError] = useState("");
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: yupResolver(schema) });
+
+    const onSubmit = async (data) => {
+        setServerError("");
+        try {
+            const response = await fetch("http://sudoku.local/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                setServerError(result.error || "A server error occurred.");
+            } else {
+                navigate("/login");
+            }
+        } catch {
+            setServerError("Error to connect the server.");
+        }
+    };
+
+    return (
+        &lt;div className="mx-auto my-8 p-6 bg-neutral-800 rounded-2xl shadow-md w-full max-w-md">
+            &lt;h1 className="text-2xl font-semibold mb-4 text-white">Registration&lt;/h1>
+
+            &lt;form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                {serverError &amp;&amp; (&lt;div className="text-sm text-rose-200 bg-rose-900/20 p-2 rounded">{serverError}&lt;/div>)}
+
+                &lt;div>
+                    &lt;label htmlFor="name" className="block text-sm mb-1 text-neutral-200">Name&lt;/label>
+                    &lt;input id="name" type="text"{...register("name")}
+                           className="w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           aria-invalid={errors.name ? "true" : "false"}/>
+                    {errors.name &amp;&amp; &lt;p className="text-xs text-rose-400 mt-1">{errors.name.message}&lt;/p>}
+                &lt;/div>
+
+                &lt;div>
+                    &lt;label htmlFor="email" className="block text-sm mb-1 text-neutral-200">Email&lt;/label>
+                    &lt;input id="email" type="email" {...register("email")} className="w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           aria-invalid={errors.email ? "true" : "false"}/>
+                    {errors.email &amp;&amp; &lt;p className="text-xs text-rose-400 mt-1">{errors.email.message}&lt;/p>}
+                &lt;/div>
+
+                &lt;div>
+                    &lt;label htmlFor="password" className="block text-sm mb-1 text-neutral-200">Password&lt;/label>
+                    &lt;input id="password" type="password" {...register("password")}
+                           className="w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           aria-invalid={errors.password ? "true" : "false"}/>
+                    {errors.password &amp;&amp; &lt;p className="text-xs text-rose-400 mt-1">{errors.password.message}&lt;/p>}
+                &lt;/div>
+
+                &lt;div>
+                    &lt;label htmlFor="confirmPassword" className="block text-sm mb-1 text-neutral-200">Confirm Password&lt;/label>
+                    &lt;input id="confirmPassword" type="password"{...register("confirmPassword")}
+                           className="w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           aria-invalid={errors.confirmPassword ? "true" : "false"}/>
+                    {errors.confirmPassword &amp;&amp; (&lt;p className="text-xs text-rose-400 mt-1">{errors.confirmPassword.message}&lt;/p>)}
+                &lt;/div>
+
+                &lt;div className="space-y-2">
+                    &lt;button type="submit" disabled={isSubmitting}
+                            className="w-full px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white font-medium transition">
+                        {isSubmitting ? "Registering..." : "Register"}
+                    &lt;/button>
+
+                    &lt;p className="text-xs text-neutral-400 text-center leading-relaxed">
+                        By clicking "Register", you agree to our {" "}
+                        &lt;Link to="/privacy" className="text-indigo-400 hover:text-indigo-300 underline transition-colors">
+                            Privacy Policy
+                        &lt;/Link>
+                        {" "} and the processing of your personal data.
+                    &lt;/p>
+
+                    &lt;Link to="/" className="block text-center w-full px-4 py-2 rounded-md bg-neutral-700 hover:bg-neutral-600 text-white font-medium transition">
+                        Back to Main
+                    &lt;/Link>
+                &lt;/div>
+            &lt;/form>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

@@ -11,6 +11,14 @@ const schema = yup.object({
         .matches(/^\S+$/, "Password must not contain spaces.")
 }).required();
 
+/**
+ * LoginPage Component.
+ * Відображає сторінку входу користувача з валідацією через react-hook-form та yup.
+ *
+ * @component
+ * @name LoginPage
+ * @returns {React.ReactElement} Повертає елемент сторінки з формою входу.
+ */
 export default function LoginPage() {
     const { login } = useAuth();
     const [serverError, setServerError] = useState("");

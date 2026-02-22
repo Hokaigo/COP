@@ -1,3 +1,13 @@
+/**
+ * StartPage Component.
+ * Вітальна сторінка, яка слугує точкою входу в ігровий процес.
+ *
+ * @component
+ * @name StartPage
+ * @param {Object} props - Властивості компонента.
+ * @param {Function} props.onStart - Запускає процес генерації гри.
+ * @returns {React.ReactElement} Контейнер з вітальним текстом та кнопкою старту.
+ */
 export default function StartPage({ onStart }) {
     return (
         <div className="flex flex-col items-center justify-center text-center py-16">

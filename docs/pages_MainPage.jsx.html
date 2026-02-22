@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> pages/MainPage.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="App.html">App</a></li><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="Board.html">Board</a></li><li><a href="Cell.html">Cell</a></li><li><a href="CookiePopup.html">CookiePopup</a></li><li><a href="Footer.html">Footer</a></li><li><a href="GameResultsModal.html">GameResultsModal</a></li><li><a href="GuestRoute.html">GuestRoute</a></li><li><a href="Header.html">Header</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="MainPage.html">MainPage</a></li><li><a href="NotFoundPage.html">NotFoundPage</a></li><li><a href="PrivacyPage.html">PrivacyPage</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProtectedRoute.html">ProtectedRoute</a></li><li><a href="RegisterPage.html">RegisterPage</a></li><li><a href="SettingsModal.html">SettingsModal</a></li><li><a href="StartPage.html">StartPage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BACKEND_URL">BACKEND_URL</a></li><li><a href="global.html#DEFAULT_EMPTY_CELLS">DEFAULT_EMPTY_CELLS</a></li><li><a href="global.html#EMPTY_CELLS_BOUNDS">EMPTY_CELLS_BOUNDS</a></li><li><a href="global.html#PRESETS">PRESETS</a></li><li><a href="global.html#countSolutions">countSolutions</a></li><li><a href="global.html#deleteAllUserStats">deleteAllUserStats</a></li><li><a href="global.html#deleteSingleUserStat">deleteSingleUserStat</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#generatePuzzle">generatePuzzle</a></li><li><a href="global.html#generateSolvedBoard">generateSolvedBoard</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useGame">useGame</a></li><li><a href="global.html#useGameController">useGameController</a></li><li><a href="global.html#usePuzzle">usePuzzle</a></li><li><a href="global.html#useResultsStore">useResultsStore</a></li><li><a href="global.html#useSettingsStore">useSettingsStore</a></li><li><a href="global.html#useTimer">useTimer</a></li><li><a href="global.html#useUIStore">useUIStore</a></li><li><a href="global.html#useUserProfile">useUserProfile</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>pages/MainPage.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Board from "../components/game/Board.jsx";
+import useGameController from "../hooks/game/useGameController.jsx";
+import { useEffect, useRef } from "react";
+import { formatTime } from "../utils/time.js";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import {useSettingsStore} from "../store/domain/settingsStore.js";
+import {useResultsStore} from "../store/domain/resultsStore.js";
+import {useUIStore} from "../store/ui/uiStore.js";
+
+/**
+ * MainPage Component.
+ * Головний ігровий екран вебдодатку: ігрове поле, таймер та панель дій.
+ *
+ * @component
+ * @name MainPage
+ * @param {Object} props - Властивості компонента.
+ * @param {Function} props.onBackToStart - Функція для повернення на стартовий екран.
+ * @returns {React.ReactElement} Контейнер гри з таймером та ігровою дошкою.
+ */
+export default function MainPage({ onBackToStart }) {
+    const { currentUser } = useAuth();
+
+    const difficulty = useSettingsStore((state) => state.settings.difficulty);
+    const setResult = useResultsStore((state) => state.setResult);
+
+    const openResultsModal = useUIStore((state) => state.openResults);
+    const isSettingsOpen = useUIStore((state) => state.modals.settings);
+
+    const { board, fixed, selected, sameGrid, lineGrid, blockGrid, selectCell, unselectCell, updateCell,
+        calculateResult, resetGame, pauseTimer, startTimer, timeLeft, running, totalTime } = useGameController({ onTimeEnd: handleTimeEnd });
+
+    function handleTimeEnd(result) {
+        sendAndShowResult(result);
+    }
+
+    function handleShowResult() {
+        pauseTimer?.();
+        const result = calculateResult();
+        const timeSpent = (totalTime || 0) - (timeLeft || 0);
+        sendAndShowResult({ ...result, timeSpent });
+    }
+
+    function sendAndShowResult(resultData) {
+        setResult(resultData);
+        openResultsModal();
+
+        if (currentUser &amp;&amp; resultData) {
+            const token = localStorage.getItem("token");
+            if (token) {
+                fetch("http://sudoku.local/stats", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        difficulty: difficulty,
+                        timeSpent: Math.round(resultData.timeSpent),
+                        correct: resultData.correct,
+                        score: resultData.score,
+                    }),
+                })
+                    .then((res) => {
+                        if (!res.ok) {
+                            console.error("Error saving stats, respond status:", res.status);
+                            return res.json().catch(() => ({ error: `Server error ${res.status}` }));
+                        }
+                        return res.json();
+                    })
+                    .catch((e) => {
+                        console.error("Network error while trying to save stats:", e);
+                    });
+            }
+        }
+    }
+
+    const wasRunningRef = useRef(false);
+
+    useEffect(() => {
+        if (isSettingsOpen) {
+            wasRunningRef.current = running;
+            if (running) {
+                pauseTimer();
+            }
+        } else {
+            if (wasRunningRef.current) {
+                startTimer();
+            }
+            wasRunningRef.current = false;
+        }
+    }, [isSettingsOpen, pauseTimer, startTimer]);
+
+    return (
+        &lt;div>
+            &lt;div className="board-card p-3 rounded-lg mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                &lt;div className="flex items-center gap-2">
+                    &lt;button onClick={onBackToStart}
+                        className="px-4 py-2 rounded-md bg-neutral-700 hover:bg-neutral-600 text-sm font-medium transition">
+                        To main page
+                    &lt;/button>
+                &lt;/div>
+
+                &lt;div className="flex items-center gap-2 justify-center sm:justify-end">
+                    &lt;div tabIndex={-1} aria-hidden className={`px-4 py-2 text-lg font-semibold rounded-md pe-none ${
+                            running ? "bg-amber-300 text-black" : "bg-red-600 text-white" }`}>
+                        {formatTime(timeLeft)}
+                    &lt;/div>
+
+                    &lt;button onClick={resetGame} className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-500 text-white font-medium transition">
+                        Reset
+                    &lt;/button>
+
+                    &lt;button onClick={handleShowResult}
+                        className="px-4 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition">
+                        Show result
+                    &lt;/button>
+                &lt;/div>
+            &lt;/div>
+
+            &lt;div className="card sudoku mb-6">
+                &lt;Board board={board} fixed={fixed} selected={selected} sameGrid={sameGrid} lineGrid={lineGrid}
+                    blockGrid={blockGrid} onSelectCell={selectCell} onChangeCell={updateCell} onBlurCell={unselectCell}/>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

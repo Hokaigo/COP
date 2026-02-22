@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/common/modal/SettingsModal.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="App.html">App</a></li><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="Board.html">Board</a></li><li><a href="Cell.html">Cell</a></li><li><a href="CookiePopup.html">CookiePopup</a></li><li><a href="Footer.html">Footer</a></li><li><a href="GameResultsModal.html">GameResultsModal</a></li><li><a href="GuestRoute.html">GuestRoute</a></li><li><a href="Header.html">Header</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="MainPage.html">MainPage</a></li><li><a href="NotFoundPage.html">NotFoundPage</a></li><li><a href="PrivacyPage.html">PrivacyPage</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProtectedRoute.html">ProtectedRoute</a></li><li><a href="RegisterPage.html">RegisterPage</a></li><li><a href="SettingsModal.html">SettingsModal</a></li><li><a href="StartPage.html">StartPage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BACKEND_URL">BACKEND_URL</a></li><li><a href="global.html#DEFAULT_EMPTY_CELLS">DEFAULT_EMPTY_CELLS</a></li><li><a href="global.html#EMPTY_CELLS_BOUNDS">EMPTY_CELLS_BOUNDS</a></li><li><a href="global.html#PRESETS">PRESETS</a></li><li><a href="global.html#countSolutions">countSolutions</a></li><li><a href="global.html#deleteAllUserStats">deleteAllUserStats</a></li><li><a href="global.html#deleteSingleUserStat">deleteSingleUserStat</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#generatePuzzle">generatePuzzle</a></li><li><a href="global.html#generateSolvedBoard">generateSolvedBoard</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useGame">useGame</a></li><li><a href="global.html#useGameController">useGameController</a></li><li><a href="global.html#usePuzzle">usePuzzle</a></li><li><a href="global.html#useResultsStore">useResultsStore</a></li><li><a href="global.html#useSettingsStore">useSettingsStore</a></li><li><a href="global.html#useTimer">useTimer</a></li><li><a href="global.html#useUIStore">useUIStore</a></li><li><a href="global.html#useUserProfile">useUserProfile</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/common/modal/SettingsModal.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { PRESETS, EMPTY_CELLS_BOUNDS } from "../../../config/gameConfig.js";
+import {useSettingsStore} from "../../../store/domain/settingsStore.js";
+import {useUIStore} from "../../../store/ui/uiStore.js";
+
+const modalRoot = typeof document !== "undefined" ? document.getElementById("modal-root") : null;
+
+const schema = yup.object({
+    difficulty: yup.string().oneOf(Object.keys(PRESETS)).required("Please, select difficulty level."),
+    emptyCellsCount: yup.number().typeError("Input data must be a number.")
+        .min(EMPTY_CELLS_BOUNDS.min, `Input value must be more or equal ${EMPTY_CELLS_BOUNDS.min}.`)
+        .max(EMPTY_CELLS_BOUNDS.max, `Input value must be less or equal ${EMPTY_CELLS_BOUNDS.max}.`)
+        .required("Please, select empty cells quantity on initialization."),
+    timeLimit: yup.number().typeError("Input data must be a number.").min(30, "Input value must be more or equal 30.")
+        .required("Please, select time limit in seconds."),
+});
+
+/**
+ * SettingsModal Component.
+ * Відображає модальне вікно налаштувань гри.
+ * Дозволяє користувачу обрати рівень складності, точну кількість порожніх клітинок та ліміт часу.
+ * Використовує бібліотеку react-hook-form для керування формою та yup для її валідації.
+ *
+ * @component
+ * @name SettingsModal
+ * @returns {React.ReactPortal|null} Повертає React Portal з формою налаштувань або null.
+ */
+export default function SettingsModal() {
+    const isOpen = useUIStore((state) => state.modals.settings);
+    const closeModal = useUIStore((state) => state.closeSettings);
+
+    const settings = useSettingsStore((state) => state.settings);
+    const update = useSettingsStore((state) => state.update)
+
+    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: settings
+    });
+
+    useEffect(() => {
+        if (isOpen) {
+            reset(settings);
+        }
+    }, [isOpen, settings, reset]);
+
+    function onSubmit(data) {
+        update({
+            difficulty: data.difficulty,
+            emptyCellsCount: Number(data.emptyCellsCount),
+            timeLimit: Number(data.timeLimit),
+        });
+        closeModal();
+    }
+
+    if (!isOpen || !modalRoot) return null;
+
+    return ReactDOM.createPortal(
+        &lt;div className="fixed inset-0 z-50 flex items-center justify-center">
+            &lt;div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeModal} aria-hidden="true"/>
+                &lt;div role="dialog" aria-modal="true" className="relative w-full max-w-lg mx-4" onClick={(e) => e.stopPropagation()}>
+                    &lt;form onSubmit={handleSubmit(onSubmit)}
+                        className="bg-neutral-800 text-neutral-100 rounded-2xl shadow-xl p-6 border border-neutral-700">
+                        &lt;div className="flex items-start justify-between mb-4">
+                            &lt;h3 className="text-lg font-semibold">Game settings&lt;/h3>
+                            &lt;button type="button" onClick={closeModal} aria-label="Close"
+                                    className="text-neutral-300 hover:text-neutral-100 rounded-full p-1">x&lt;/button>
+                        &lt;/div>
+
+                        &lt;div className="space-y-4">
+                            &lt;div>
+                                &lt;label htmlFor="difficulty-select" className="block text-sm mb-1">Difficulty
+                                    level&lt;/label>
+                                &lt;select
+                                    id="difficulty-select"
+                                    {...register("difficulty", {
+                                        onChange: (e) => {
+                                            const newDiff = e.target.value;
+                                            const preset = PRESETS[newDiff];
+                                            if (preset) {
+                                                setValue("emptyCellsCount", preset.emptyCellsCount, {shouldValidate: true});
+                                                setValue("timeLimit", preset.timeLimit, {shouldValidate: true});
+                                            }
+                                        }
+                                    })}
+                                    className="w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    {Object.keys(PRESETS).map((k) => (
+                                        &lt;option key={k} value={k}>
+                                            {k[0].toUpperCase() + k.slice(1)}
+                                        &lt;/option>
+                                    ))}
+                                &lt;/select>
+                                {errors.difficulty &amp;&amp; (
+                                    &lt;p className="text-xs text-rose-400 mt-1">{errors.difficulty.message}&lt;/p>)}
+                            &lt;/div>
+
+                            &lt;div>
+                                &lt;label htmlFor="emptyCellsCount-input" className="block text-sm mb-1">
+                                    Empty cells quantity ({EMPTY_CELLS_BOUNDS.min} - {EMPTY_CELLS_BOUNDS.max})
+                                &lt;/label>
+                                &lt;input id="emptyCellsCount-input" type="number"{...register("emptyCellsCount")}
+                                       className="w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+                                {errors.emptyCellsCount &amp;&amp; (
+                                    &lt;p className="text-xs text-rose-400 mt-1">{errors.emptyCellsCount.message}&lt;/p>)}
+                            &lt;/div>
+
+                            &lt;div>
+                                &lt;label htmlFor="timeLimit-input" className="block text-sm mb-1">
+                                    Time limit (in seconds)
+                                &lt;/label>
+                                &lt;input id="timeLimit-input" type="number"{...register("timeLimit")}
+                                       className="w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+                                {errors.timeLimit &amp;&amp; (
+                                    &lt;p className="text-xs text-rose-400 mt-1">{errors.timeLimit.message}&lt;/p>)}
+                            &lt;/div>
+                        &lt;/div>
+
+                        &lt;div className="mt-6 flex justify-end gap-3">
+                            &lt;button type="button" onClick={closeModal} className="px-4 py-2 rounded-md bg-neutral-700 hover:bg-neutral-600">
+                                Cancel
+                            &lt;/button>
+                            &lt;button type="submit" className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500">Save&lt;/button>
+                        &lt;/div>
+                    &lt;/form>
+                &lt;/div>
+            &lt;/div>,
+        modalRoot
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

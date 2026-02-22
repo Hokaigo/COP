@@ -2,6 +2,15 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useUIStore } from "../../store/ui/uiStore.js"
 
+/**
+ * Header Component.
+ * Відображає головну шапку вебдодатка з навігацією.
+ * Містить логотип, посилання на політику конфіденційності, кнопку відкриття модального вікна налаштувань, а також динамічне меню авторизації.
+ *
+ * @component
+ * @name Header
+ * @returns {React.ReactElement} Повертає елемент `<header>` з навігаційним меню.
+ */
 export default function Header() {
     const { currentUser, logout } = useAuth();
     const openSettings = useUIStore((state) => state.openSettings);
@@ -12,6 +21,11 @@ export default function Header() {
                 <Link to="/" className="text-2xl font-extrabold transition-colors"><span className="brand">Sudoku Game</span></Link>
 
                 <div className="flex items-center gap-2">
+                    <Link to="/privacy"
+                          className="px-3 py-1.5 rounded-md bg-neutral-700/90 hover:bg-neutral-600/90 text-sm font-medium transition shadow-sm text-white">
+                        Privacy
+                    </Link>
+
                     <button onClick={openSettings}
                             className="px-3 py-1.5 rounded-md bg-indigo-600/90 hover:bg-indigo-500/90 text-sm font-medium transition shadow-sm">
                         Settings

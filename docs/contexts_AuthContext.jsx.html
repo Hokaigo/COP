@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> contexts/AuthContext.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="App.html">App</a></li><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="Board.html">Board</a></li><li><a href="Cell.html">Cell</a></li><li><a href="CookiePopup.html">CookiePopup</a></li><li><a href="Footer.html">Footer</a></li><li><a href="GameResultsModal.html">GameResultsModal</a></li><li><a href="GuestRoute.html">GuestRoute</a></li><li><a href="Header.html">Header</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="MainPage.html">MainPage</a></li><li><a href="NotFoundPage.html">NotFoundPage</a></li><li><a href="PrivacyPage.html">PrivacyPage</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProtectedRoute.html">ProtectedRoute</a></li><li><a href="RegisterPage.html">RegisterPage</a></li><li><a href="SettingsModal.html">SettingsModal</a></li><li><a href="StartPage.html">StartPage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BACKEND_URL">BACKEND_URL</a></li><li><a href="global.html#DEFAULT_EMPTY_CELLS">DEFAULT_EMPTY_CELLS</a></li><li><a href="global.html#EMPTY_CELLS_BOUNDS">EMPTY_CELLS_BOUNDS</a></li><li><a href="global.html#PRESETS">PRESETS</a></li><li><a href="global.html#countSolutions">countSolutions</a></li><li><a href="global.html#deleteAllUserStats">deleteAllUserStats</a></li><li><a href="global.html#deleteSingleUserStat">deleteSingleUserStat</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#generatePuzzle">generatePuzzle</a></li><li><a href="global.html#generateSolvedBoard">generateSolvedBoard</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useGame">useGame</a></li><li><a href="global.html#useGameController">useGameController</a></li><li><a href="global.html#usePuzzle">usePuzzle</a></li><li><a href="global.html#useResultsStore">useResultsStore</a></li><li><a href="global.html#useSettingsStore">useSettingsStore</a></li><li><a href="global.html#useTimer">useTimer</a></li><li><a href="global.html#useUIStore">useUIStore</a></li><li><a href="global.html#useUserProfile">useUserProfile</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>contexts/AuthContext.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
+const AuthContext = createContext(null);
+
+/**
+ * AuthProvider Component.
+ * Провайдер контексту авторизації. Відповідає за перевірку JWT токена при завантаженні додатка,
+ * збереження стану поточного користувача та надання функцій для входу (login) і виходу (logout).
+ *
+ * @component
+ * @name AuthProvider
+ * @param {Object} props - Властивості компонента.
+ * @param {React.ReactNode} props.children - Дочірні елементи, які отримають доступ до контексту авторизації.
+ * @returns {React.ReactElement} Повертає обгортку `&lt;AuthContext.Provider>`.
+ */
+export function AuthProvider({ children }) {
+    const [currentUser, setCurrentUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setIsLoading(true);
+        const token = localStorage.getItem('token');
+        if (token){
+            try{
+                const decodedToken = jwtDecode(token);
+                if(decodedToken.exp * 1000 > Date.now()){
+                    setCurrentUser({ id: decodedToken.data.userId });
+                } else{
+                    localStorage.removeItem('token');
+                }
+            } catch{
+                localStorage.removeItem('token');
+            }
+        }
+        setIsLoading(false)
+    }, []);
+
+    const login = useCallback((token, user) =>{
+        localStorage.setItem('token', token);
+        setCurrentUser(user);
+        navigate("/")
+    }, [navigate]);
+
+    const logout = useCallback(()=>{
+        localStorage.removeItem('token');
+        setCurrentUser(null);
+        navigate('/');
+    }, [navigate]);
+
+    return &lt;AuthContext.Provider value={{ currentUser, isLoading, login, logout}}>{!isLoading &amp;&amp; children}&lt;/AuthContext.Provider>
+}
+
+/**
+ * Кастомний хук для доступу до стану та методів авторизації.
+ *
+ * @function useAuth
+ * @name useAuth
+ * @returns {Object} Об'єкт контексту авторизації.
+ * @property {Object|null} currentUser - Дані поточного користувача або null.
+ * @property {boolean} isLoading - Прапорець стану перевірки токена при першому завантаженні.
+ * @property {Function} login - Метод для виконання входу.
+ * @property {Function} logout - Метод для виходу.
+ * @throws {Error} Викидає помилку, якщо використовується поза межами `&lt;AuthProvider>`.
+ */
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (!context){
+        throw new Error("useAuth must be inside the provider");
+    }
+    return context;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

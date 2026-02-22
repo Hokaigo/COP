@@ -4,6 +4,14 @@ import { formatTime } from "../utils/time.js";
 import { useUserProfile } from "../hooks/users/useUserProfile.jsx";
 import { Link } from "react-router-dom";
 
+/**
+ * ProfilePage Component.
+ * Сторінка профілю користувача з детальною статистикою ігор.
+ *
+ * @component
+ * @name ProfilePage
+ * @returns {React.ReactElement} Елемент сторінки профілю.
+ */
 export default function ProfilePage() {
     const { userProfile, isLoading, error, handleDeleteAllStats, handleDeleteSingleStat, handleDeleteAccount } = useUserProfile();
 

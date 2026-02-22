@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> utils/userService.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="App.html">App</a></li><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="Board.html">Board</a></li><li><a href="Cell.html">Cell</a></li><li><a href="CookiePopup.html">CookiePopup</a></li><li><a href="Footer.html">Footer</a></li><li><a href="GameResultsModal.html">GameResultsModal</a></li><li><a href="GuestRoute.html">GuestRoute</a></li><li><a href="Header.html">Header</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="MainPage.html">MainPage</a></li><li><a href="NotFoundPage.html">NotFoundPage</a></li><li><a href="PrivacyPage.html">PrivacyPage</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProtectedRoute.html">ProtectedRoute</a></li><li><a href="RegisterPage.html">RegisterPage</a></li><li><a href="SettingsModal.html">SettingsModal</a></li><li><a href="StartPage.html">StartPage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BACKEND_URL">BACKEND_URL</a></li><li><a href="global.html#DEFAULT_EMPTY_CELLS">DEFAULT_EMPTY_CELLS</a></li><li><a href="global.html#EMPTY_CELLS_BOUNDS">EMPTY_CELLS_BOUNDS</a></li><li><a href="global.html#PRESETS">PRESETS</a></li><li><a href="global.html#countSolutions">countSolutions</a></li><li><a href="global.html#deleteAllUserStats">deleteAllUserStats</a></li><li><a href="global.html#deleteSingleUserStat">deleteSingleUserStat</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#generatePuzzle">generatePuzzle</a></li><li><a href="global.html#generateSolvedBoard">generateSolvedBoard</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useGame">useGame</a></li><li><a href="global.html#useGameController">useGameController</a></li><li><a href="global.html#usePuzzle">usePuzzle</a></li><li><a href="global.html#useResultsStore">useResultsStore</a></li><li><a href="global.html#useSettingsStore">useSettingsStore</a></li><li><a href="global.html#useTimer">useTimer</a></li><li><a href="global.html#useUIStore">useUIStore</a></li><li><a href="global.html#useUserProfile">useUserProfile</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>utils/userService.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { BACKEND_URL } from "../config/gameConfig.js";
+
+/**
+ * Утиліта для обробки HTTP-відповідей.
+ * Перевіряє статус відповіді та парсить JSON.
+ *
+ * @private
+ * @param {Response} response - Об'єкт відповіді від fetch.
+ * @throws {Error} Викидає помилку "Unauthorized" для статусів 401/403 або опис помилки з сервера.
+ * @returns {Promise&lt;Object>} Розпарсений JSON об'єкт.
+ */
+const handleResponse = async (response) => {
+    if (response.status === 401 || response.status === 403) {
+        throw new Error('Unauthorized');
+    }
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(data.error || `Server error: ${response.status}`);
+    }
+    return data;
+};
+
+/**
+ * Запит профілю користувача.
+ *
+ * @function fetchUserProfile
+ * @name fetchUserProfile
+ * @param {string|number} id - ID користувача.
+ * @param {string} token - JWT токен.
+ * @returns {Promise&lt;Object>} Проміс, що повертає об'єкт із даними профілю користувача.
+ */
+export const fetchUserProfile = async (id, token) => {
+    const response = await fetch(`${BACKEND_URL}/users/${id}`, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Очищення всієї статистики користувача.
+ *
+ * @function deleteAllUserStats
+ * @name deleteAllUserStats
+ * @param {string} token - JWT токен.
+ * @returns {Promise&lt;Object>} Проміс, що повертає результат операції видалення статистики.
+ */
+export const deleteAllUserStats = async (token) => {
+    const response = await fetch(`${BACKEND_URL}/stats`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Видалення одного запису статистики.
+ *
+ * @function deleteSingleUserStat
+ * @name deleteSingleUserStat
+ * @param {number} statId - ID запису.
+ * @param {string} token - JWT токен.
+ * @returns {Promise&lt;Object>} Проміс, що повертає результат операції видалення конкретного запису.
+ */
+export const deleteSingleUserStat = async (statId, token) => {
+    const response = await fetch(`${BACKEND_URL}/stats/${statId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Повне видалення облікового запису.
+ *
+ * @function deleteUserAccount
+ * @name deleteUserAccount
+ * @param {number} userId - ID користувача.
+ * @param {string} token - JWT токен.
+ * @returns {Promise&lt;{success: boolean}>} Проміс, що повертає об'єкт з прапорцем успішного завершення.
+ */
+export const deleteUserAccount = async (userId, token) => {
+    const response = await fetch(`${BACKEND_URL}/users/${userId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+        throw new Error('Unauthorized');
+    }
+    if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || `Server error: ${response.status}`);
+    }
+    return { success: true };
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
 
+/**
+ * NotFoundPage Component.
+ * Сторінка для неіснуючих маршрутів кодом 404.
+ *
+ * @component
+ * @name NotFoundPage
+ * @returns {React.ReactElement} Елемент сторінки 404.
+ */
 export default function NotFoundPage() {
     return (
         <div className="mx-auto w-full max-w-md px-4 py-20 text-center text-neutral-200">

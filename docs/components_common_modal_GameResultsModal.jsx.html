@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/common/modal/GameResultsModal.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="App.html">App</a></li><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="Board.html">Board</a></li><li><a href="Cell.html">Cell</a></li><li><a href="CookiePopup.html">CookiePopup</a></li><li><a href="Footer.html">Footer</a></li><li><a href="GameResultsModal.html">GameResultsModal</a></li><li><a href="GuestRoute.html">GuestRoute</a></li><li><a href="Header.html">Header</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="MainPage.html">MainPage</a></li><li><a href="NotFoundPage.html">NotFoundPage</a></li><li><a href="PrivacyPage.html">PrivacyPage</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProtectedRoute.html">ProtectedRoute</a></li><li><a href="RegisterPage.html">RegisterPage</a></li><li><a href="SettingsModal.html">SettingsModal</a></li><li><a href="StartPage.html">StartPage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BACKEND_URL">BACKEND_URL</a></li><li><a href="global.html#DEFAULT_EMPTY_CELLS">DEFAULT_EMPTY_CELLS</a></li><li><a href="global.html#EMPTY_CELLS_BOUNDS">EMPTY_CELLS_BOUNDS</a></li><li><a href="global.html#PRESETS">PRESETS</a></li><li><a href="global.html#countSolutions">countSolutions</a></li><li><a href="global.html#deleteAllUserStats">deleteAllUserStats</a></li><li><a href="global.html#deleteSingleUserStat">deleteSingleUserStat</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#generatePuzzle">generatePuzzle</a></li><li><a href="global.html#generateSolvedBoard">generateSolvedBoard</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useGame">useGame</a></li><li><a href="global.html#useGameController">useGameController</a></li><li><a href="global.html#usePuzzle">usePuzzle</a></li><li><a href="global.html#useResultsStore">useResultsStore</a></li><li><a href="global.html#useSettingsStore">useSettingsStore</a></li><li><a href="global.html#useTimer">useTimer</a></li><li><a href="global.html#useUIStore">useUIStore</a></li><li><a href="global.html#useUserProfile">useUserProfile</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/common/modal/GameResultsModal.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import ReactDOM from "react-dom";
+import { formatTime } from "../../../utils/time.js";
+import {useUIStore} from "../../../store/ui/uiStore.js";
+import {useResultsStore} from "../../../store/domain/resultsStore.js";
+
+const modalRoot = typeof document !== "undefined" ? document.getElementById("modal-root") : null;
+
+/**
+ * Відображає модальне вікно з фінальними результатами гри.
+ *
+ * @component
+ * @name GameResultsModal
+ * @param {Object} props - Властивості компонента.
+ * @param {Function} [props.onPlayAgain] - Коллбек для кнопки "Play again".
+ * @param {Function} [props.onBackToMain] - Коллбек для повернення на головну.
+ */
+export function GameResultsModal({ onPlayAgain, onBackToMain }) {
+    const isOpen = useUIStore((state) => state.modals.results);
+    const closeModal = useUIStore((state) => state.closeResults);
+
+    const result = useResultsStore((state) => state.result);
+
+    if (!isOpen || !modalRoot) return null;
+
+    const handleBackToMain = () =>{
+        closeModal();
+        onBackToMain?.();
+    };
+
+    const handlePlayAgain = () =>{
+        closeModal();
+        onPlayAgain?.();
+    }
+
+    return ReactDOM.createPortal(
+        &lt;div className="fixed inset-0 z-50 flex items-center justify-center">
+            &lt;div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleBackToMain} aria-hidden="true"/>
+
+            &lt;div role="dialog" aria-modal="true" className="relative w-full max-w-md mx-4 transform transition-all"
+                 onClick={(e) => e.stopPropagation()}>
+                &lt;div className="bg-neutral-800 text-neutral-100 rounded-2xl shadow-2xl p-6 border border-neutral-700">
+                    &lt;header className="mb-4">
+                        &lt;h3 className="text-xl font-semibold text-center">The Game is Over&lt;/h3>
+                    &lt;/header>
+
+                    &lt;div className="space-y-3 mb-4">
+                        &lt;p className="text-center text-sm">
+                            Result: &lt;strong className="text-indigo-300">{result?.correct ?? 0}&lt;/strong> / {result?.total ?? 81}
+                            &lt;br />
+                            Score: &lt;strong className="text-indigo-300">{result?.score ?? 0}%&lt;/strong>
+                        &lt;/p>
+
+                        &lt;p className="text-center text-sm">
+                            Time spent: &lt;strong>{formatTime(result?.timeSpent ?? 0)}&lt;/strong>
+                        &lt;/p>
+                    &lt;/div>
+
+                    &lt;footer className="flex gap-3 justify-center">
+                        &lt;button onClick={handlePlayAgain}
+                                className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 font-medium transition">
+                            Play again
+                        &lt;/button>
+
+                        &lt;button onClick={handleBackToMain}
+                                className="px-4 py-2 rounded-md bg-neutral-700 hover:bg-neutral-600 font-medium transition">
+                            To main page
+                        &lt;/button>
+                    &lt;/footer>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>,
+        modalRoot
+    );
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

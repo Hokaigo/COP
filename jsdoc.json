@@ -1,0 +1,17 @@
+{
+  "source": {
+    "include": ["src"],
+    "includePattern": ".+\\.jsx?$",
+    "excludePattern": "(^|\\/|\\\\)_|node_modules"
+  },
+  "plugins": [
+    "plugins/markdown",
+    "node_modules/better-docs/category",
+    "node_modules/better-docs/component"
+  ],
+  "opts": {
+    "recurse": true,
+    "destination": "./docs",
+    "template": "node_modules/better-docs"
+  }
+}
