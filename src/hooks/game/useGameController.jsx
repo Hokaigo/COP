@@ -4,7 +4,23 @@ import useGame from "./useGame.jsx";
 import useTimer from "../common/useTimer.jsx";
 import {useSettingsStore} from "../../store/domain/settingsStore.js";
 
-
+/**
+ * Кастомний хук-контролер, який поєднує всю логіку гри Судоку.
+ * Контролює генерацію поля, логіку ігрового стану, таймер та налаштування.
+ *
+ * @function useGameController
+ * @name useGameController
+ * @param {Object} [options={}] - Опції контролера.
+ * @param {boolean} [options.autoRestartOnSettings=true] - Авто-генерація при зміні налаштувань.
+ * @param {Function} [options.onTimeEnd] - Коллбек при закінченні часу.
+ * @returns {Object} Стан гри та таймера (включає всі властивості `useGame`).
+ * @property {Function} resetGame - Повний перезапуск поточної гри та таймера.
+ * @property {number} timeLeft - Час, що залишився у секундах.
+ * @property {number} totalTime - Загальний ліміт часу у секундах.
+ * @property {boolean} running - Чи активний зараз таймер.
+ * @property {Function} startTimer - Відновлення таймера.
+ * @property {Function} pauseTimer - Призупинення таймера.
+ */
 export default function useGameController( { autoRestartOnSettings = true, onTimeEnd } = {} ){
     const settings = useSettingsStore((state) => state.settings);
 

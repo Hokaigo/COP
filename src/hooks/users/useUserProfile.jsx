@@ -3,6 +3,20 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext.jsx";
 import {useCallback, useEffect, useState} from "react";
 
+/**
+ * Кастомний хук для керування профілем користувача.
+ * Відповідає за завантаження даних профілю з перевіркою авторизації та надання методів для видалення статистики і акаунту.
+ *
+ * @function useUserProfile
+ * @name useUserProfile
+ * @returns {Object} Об'єкт стану та методів керування профілем.
+ * @property {Object|null} userProfile - Дані профілю користувача або null.
+ * @property {boolean} isLoading - Прапорець процесу завантаження даних.
+ * @property {string} error - Текст помилки запиту.
+ * @property {Function} handleDeleteAllStats - Метод для видалення всієї статистики.
+ * @property {Function} handleDeleteSingleStat - Метод для видалення одного запису (statId).
+ * @property {Function} handleDeleteAccount - Метод для повного видалення акаунту.
+ */
 export function useUserProfile(){
     const { id: urlId } = useParams();
     const { currentUser, logout } = useAuth();

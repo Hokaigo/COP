@@ -8,6 +8,26 @@ function emptyGrid() {
     return Array.from({ length: 9 }, () => Array(9).fill(false));
 }
 
+/**
+ * Кастомний хук для керування станом та логікою гри Судоку.
+ * Відповідає за збереження стану поля, обробку виділення та розрахунок підсвічування.
+ *
+ * @function useGame
+ * @name useGame
+ * @param {Array<Array<number|null>>} dataSeed - Двовимірний масив (9x9) з початковими даними поля.
+ * @returns {Object} Об'єкт стану та методів для взаємодії з ігровим полем.
+ * @property {Array<Array<number|null>>} board - Поточний стан ігрового поля.
+ * @property {Array<Array<boolean>>} fixed - Матриця, що вказує на стартові клітинки.
+ * @property {Object} selected - Координати вибраної клітинки `{row, col}`.
+ * @property {Array<Array<boolean>>} sameGrid - Підсвічування клітинок з таким самим значенням.
+ * @property {Array<Array<boolean>>} lineGrid - Підсвічування рядка та стовпця.
+ * @property {Array<Array<boolean>>} blockGrid - Підсвічування квадрата 3x3.
+ * @property {Function} selectCell - Вибір клітинки за координатами.
+ * @property {Function} unselectCell - Зняття виділення.
+ * @property {Function} updateCell - Оновлення значення клітинки.
+ * @property {Function} calculateResult - Перевірка результатів заповнення.
+ * @property {Function} reset - Скидання поля до початкового `dataSeed`.
+ */
 export default function useGame(dataSeed) {
     const [board, setBoard] = useState(() => cloneBoard(dataSeed));
     const fixed = useMemo(() => (dataSeed || []).map(row => row.map(cell => cell !== null)), [dataSeed]);

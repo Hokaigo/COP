@@ -4,7 +4,7 @@ import StartPage from "./pages/StartPage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import { useState } from "react";
 import SettingsModal from "./components/common/modal/SettingsModal.jsx";
-import GameResultsModal from "./components/common/modal/GameResultsModal.jsx";
+import { GameResultsModal } from './components/common/modal/GameResultsModal';
 import { Route, Routes, useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
@@ -13,7 +13,17 @@ import { AuthProvider } from "./contexts/AuthContext.jsx";
 import GuestRoute from "./components/common/routes/GuestRoute.jsx";
 import ProtectedRoute from "./components/common/routes/ProtectedRoute.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+import CookiePopup from "./components/common/CookiePopup.jsx";
+import PrivacyPage from "./pages/PrivacyPage.jsx";
 
+/**
+ * Root Component - App.
+ * Головний компонент додатка, що визначає загальну структуру та логіку маршрутизації.
+ *
+ * @component
+ * @name App
+ * @returns {React.ReactElement} Головний контейнер додатка з деревом маршрутів та глобальними компонентами.
+ */
 export default function App() {
     const [replayKey, setReplayKey] = useState(0);
     const navigate = useNavigate();
@@ -28,6 +38,8 @@ export default function App() {
                             <Route path="/" element={<StartPage onStart={() => navigate("/game")} />}/>
 
                             <Route path="/game" element={<MainPage key={replayKey} onBackToStart={() => navigate("/")}/> }/>
+
+                            <Route path="/privacy" element={<PrivacyPage />} />
 
                             <Route element={<GuestRoute />}>
                                 <Route path="/login" element={<LoginPage />} />
@@ -55,6 +67,7 @@ export default function App() {
                         navigate("/");
                     }}
                 />
+            <CookiePopup />
         </AuthProvider>
     );
 }

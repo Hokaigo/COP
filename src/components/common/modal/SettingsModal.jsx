@@ -19,6 +19,16 @@ const schema = yup.object({
         .required("Please, select time limit in seconds."),
 });
 
+/**
+ * SettingsModal Component.
+ * Відображає модальне вікно налаштувань гри.
+ * Дозволяє користувачу обрати рівень складності, точну кількість порожніх клітинок та ліміт часу.
+ * Використовує бібліотеку react-hook-form для керування формою та yup для її валідації.
+ *
+ * @component
+ * @name SettingsModal
+ * @returns {React.ReactPortal|null} Повертає React Portal з формою налаштувань або null.
+ */
 export default function SettingsModal() {
     const isOpen = useUIStore((state) => state.modals.settings);
     const closeModal = useUIStore((state) => state.closeSettings);

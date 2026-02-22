@@ -14,6 +14,14 @@ const schema = yup.object({
     confirmPassword: yup.string().oneOf([yup.ref("password")], "Passwords must match.").required("Please confirm your password."),
     }).required();
 
+/**
+ * RegisterPage Component.
+ * Сторінка реєстрації нового користувача.
+ *
+ * @component
+ * @name RegisterPage
+ * @returns {React.ReactElement} Форма реєстрації.
+ */
 export default function RegisterPage() {
     const navigate = useNavigate();
     const [serverError, setServerError] = useState("");
@@ -85,6 +93,14 @@ export default function RegisterPage() {
                             className="w-full px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white font-medium transition">
                         {isSubmitting ? "Registering..." : "Register"}
                     </button>
+
+                    <p className="text-xs text-neutral-400 text-center leading-relaxed">
+                        By clicking "Register", you agree to our {" "}
+                        <Link to="/privacy" className="text-indigo-400 hover:text-indigo-300 underline transition-colors">
+                            Privacy Policy
+                        </Link>
+                        {" "} and the processing of your personal data.
+                    </p>
 
                     <Link to="/" className="block text-center w-full px-4 py-2 rounded-md bg-neutral-700 hover:bg-neutral-600 text-white font-medium transition">
                         Back to Main

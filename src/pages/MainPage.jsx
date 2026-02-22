@@ -7,6 +7,16 @@ import {useSettingsStore} from "../store/domain/settingsStore.js";
 import {useResultsStore} from "../store/domain/resultsStore.js";
 import {useUIStore} from "../store/ui/uiStore.js";
 
+/**
+ * MainPage Component.
+ * Головний ігровий екран вебдодатку: ігрове поле, таймер та панель дій.
+ *
+ * @component
+ * @name MainPage
+ * @param {Object} props - Властивості компонента.
+ * @param {Function} props.onBackToStart - Функція для повернення на стартовий екран.
+ * @returns {React.ReactElement} Контейнер гри з таймером та ігровою дошкою.
+ */
 export default function MainPage({ onBackToStart }) {
     const { currentUser } = useAuth();
 

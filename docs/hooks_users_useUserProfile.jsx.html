@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> hooks/users/useUserProfile.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="App.html">App</a></li><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="Board.html">Board</a></li><li><a href="Cell.html">Cell</a></li><li><a href="CookiePopup.html">CookiePopup</a></li><li><a href="Footer.html">Footer</a></li><li><a href="GameResultsModal.html">GameResultsModal</a></li><li><a href="GuestRoute.html">GuestRoute</a></li><li><a href="Header.html">Header</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="MainPage.html">MainPage</a></li><li><a href="NotFoundPage.html">NotFoundPage</a></li><li><a href="PrivacyPage.html">PrivacyPage</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="ProtectedRoute.html">ProtectedRoute</a></li><li><a href="RegisterPage.html">RegisterPage</a></li><li><a href="SettingsModal.html">SettingsModal</a></li><li><a href="StartPage.html">StartPage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BACKEND_URL">BACKEND_URL</a></li><li><a href="global.html#DEFAULT_EMPTY_CELLS">DEFAULT_EMPTY_CELLS</a></li><li><a href="global.html#EMPTY_CELLS_BOUNDS">EMPTY_CELLS_BOUNDS</a></li><li><a href="global.html#PRESETS">PRESETS</a></li><li><a href="global.html#countSolutions">countSolutions</a></li><li><a href="global.html#deleteAllUserStats">deleteAllUserStats</a></li><li><a href="global.html#deleteSingleUserStat">deleteSingleUserStat</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#formatTime">formatTime</a></li><li><a href="global.html#generatePuzzle">generatePuzzle</a></li><li><a href="global.html#generateSolvedBoard">generateSolvedBoard</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useGame">useGame</a></li><li><a href="global.html#useGameController">useGameController</a></li><li><a href="global.html#usePuzzle">usePuzzle</a></li><li><a href="global.html#useResultsStore">useResultsStore</a></li><li><a href="global.html#useSettingsStore">useSettingsStore</a></li><li><a href="global.html#useTimer">useTimer</a></li><li><a href="global.html#useUIStore">useUIStore</a></li><li><a href="global.html#useUserProfile">useUserProfile</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>hooks/users/useUserProfile.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {fetchUserProfile, deleteAllUserStats, deleteSingleUserStat, deleteUserAccount } from "../../utils/userService.js";
+import {useNavigate, useParams} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext.jsx";
+import {useCallback, useEffect, useState} from "react";
+
+/**
+ * Кастомний хук для керування профілем користувача.
+ * Відповідає за завантаження даних профілю з перевіркою авторизації та надання методів для видалення статистики і акаунту.
+ *
+ * @function useUserProfile
+ * @name useUserProfile
+ * @returns {Object} Об'єкт стану та методів керування профілем.
+ * @property {Object|null} userProfile - Дані профілю користувача або null.
+ * @property {boolean} isLoading - Прапорець процесу завантаження даних.
+ * @property {string} error - Текст помилки запиту.
+ * @property {Function} handleDeleteAllStats - Метод для видалення всієї статистики.
+ * @property {Function} handleDeleteSingleStat - Метод для видалення одного запису (statId).
+ * @property {Function} handleDeleteAccount - Метод для повного видалення акаунту.
+ */
+export function useUserProfile(){
+    const { id: urlId } = useParams();
+    const { currentUser, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const [userProfile, setUserProfile] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    const loadProfile = useCallback(async () => {
+        if (!currentUser || !urlId) return;
+
+        if (currentUser.id !== Number(urlId)) {
+            navigate(`/profile/${currentUser.id}`, { replace: true });
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            logout();
+            return;
+        }
+
+        setIsLoading(true);
+        setError('');
+        try {
+            const data = await fetchUserProfile(urlId, token);
+            setUserProfile(data);
+        } catch (err) {
+            if (err.message === 'Unauthorized') {
+                logout();
+            } else {
+                setError(err.message || "Failed to load profile.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }, [urlId, currentUser, navigate, logout]);
+
+    useEffect(() => {
+        loadProfile();
+    }, [loadProfile]);
+
+    const handleDeleteAllStats = useCallback(async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            logout();
+            return;
+        }
+        const confirmed = window.confirm("Are you sure you want to delete all stats info? This action cannot be undone.");
+        if (!confirmed) return;
+
+        setError('');
+        try {
+            await deleteAllUserStats(token);
+            setUserProfile(prev => ({ ...prev, stats: [] }));
+        } catch (err) {
+            if (err.message === 'Unauthorized'){
+                logout();
+            }
+            else setError(err.message || 'Failed to delete all stats.');
+        }
+    }, [logout]);
+
+    const handleDeleteSingleStat = useCallback(async (statId) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            logout();
+            return;
+        }
+        const confirmed = window.confirm("Are you sure you want to delete this stat info? This action cannot be undone.");
+        if (!confirmed) return;
+
+        setError('');
+        try {
+            await deleteSingleUserStat(statId, token);
+            setUserProfile(prev => ({
+                ...prev,
+                stats: prev.stats.filter(stat => stat.id !== statId)
+            }));
+        } catch (err) {
+            if (err.message === 'Unauthorized'){
+                logout();
+            }
+            else setError(err.message || 'Failed to delete stat.');
+        }
+    }, [logout]);
+
+    const handleDeleteAccount = useCallback(async () => {
+        const token = localStorage.getItem('token');
+        if (!token || !currentUser) {
+            logout(); return;
+        }
+        const confirmed = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+        if (!confirmed) return;
+
+        setError('');
+        try {
+            await deleteUserAccount(currentUser.id, token);
+            alert('Your account was deleted successfully');
+            logout();
+        } catch (err) {
+            console.error("Error deleting account:", err);
+            if (err.message === 'Unauthorized') logout();
+            else setError(err.message || "Failed to delete account.");
+        }
+    }, [currentUser, logout]);
+
+    return { userProfile, isLoading, error, handleDeleteAllStats, handleDeleteSingleStat, handleDeleteAccount };
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

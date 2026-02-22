@@ -1,4 +1,24 @@
 import {useState, useRef, useEffect, useCallback} from "react";
+
+/**
+ * Кастомний хук для реалізації таймера зворотного відліку.
+ * Надає стан часу, що залишився, а також методи для керування таймером.
+ *
+ * @function useTimer
+ * @name useTimer
+ * @param {Object} [options={}] - Опції налаштування таймера.
+ * @param {number} [options.initial=0] - Початковий час у секундах.
+ * @param {boolean} [options.autoStart=false] - Чи запускати таймер автоматично при ініціалізації.
+ * @param {Function} [options.onEnd] - Коллбек-функція, яка викликається, коли час вичерпано.
+ * @returns {Object} Об'єкт стану та методів керування таймером.
+ * @property {number} timeLeft - Кількість секунд, що залишилася.
+ * @property {boolean} isRunning - Поточний стан таймера: запущений чи на паузі.
+ * @property {Function} start - Метод для запуска таймера.
+ * @property {Function} pause - Метод для призупинення таймера.
+ * @property {Function} reset - Метод для скидання таймера до початкового стану.
+ * @property {Function} set - Метод для прямого ручного встановлення часу.
+ * @property {Function} setIsRunning - Метод для ручного керування станом активності.
+ */
 export default function useTimer({ initial = 0, autoStart = false, onEnd } = { }){
     const [timeLeft, setTimeLeft] = useState(initial);
     const [isRunning, setIsRunning] = useState(Boolean(autoStart));

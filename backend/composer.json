@@ -1,5 +1,6 @@
 {
     "name": "1/backend",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "1\\Backend\\": "src/"
